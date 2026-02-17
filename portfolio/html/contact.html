@@ -1,8 +1,72 @@
 <!DOCTYPE html>
 
-<head></head>
+<head>
+    <title>
+        Contact Me From
+    </title>
+</head>
 
-<body></body>
+<body>
+    <form method="post">
+        <table>
+            <h3>Contact Me from</h3>
+            <tr>
+                <td><label for=" First name">First Name:</label></td>
+                <td><input type="text" id="name" name="name" required placeholder="First Name" maxlength="10"></td>
+            </tr>
+            <tr>
+                <td><label for=" First name">Last Name:</label></td>
+                <td><input type="text" id="name" name="name" required placeholder="Last Name" maxlength="10"></td>
+            </tr>
+            <tr>
+                <td><label for="Gender">Gender:</label></td>
+                <td><input type="radio" name="gender" value="male"> Male
+                    <input type="radio" name="gender" value="female"> Female
+                </td>
+            </tr>
+            <tr>
+                <td><label for="email">Email:</label></td>
+                <td><input type="email" id="email" name="email" required placeholder="Email"></td>
+            </tr>
+
+            <tr>
+                <td><label for="company">Company:</label></td>
+                <td><input type="text" id="text" name="email" required placeholder="Company Name" maxlength="20"></td>
+            </tr>
+            <tr>
+                <td><label for="Reason for contact">Reason for Contact:</label></td>
+                <td><input type="checkbox" value="Project">Project
+                    <input type="checkbox" value="Thesis">Thesis
+                    <input type="checkbox" value="Job">Job
+                </td>
+            </tr>
+
+            <tr>
+                <td><label for="Topic">Topic:</label></td>
+                <td> <input type="checkbox" value="Web Development">Web Development </td>
+                <td> <input type="checkbox" value="Mobile Development">Mobile Development</td>
+                <td> <input type="checkbox" value="AI/ML Development">AI/ML Development</td>
+            </tr>
+
+            <tr>
+                <td><label for="Consultion">Consultion Date:</label></td>
+                <td><input type="date" required></td>
+            </tr>
+
+
+        </table>
+
+        <table>
+            <tr>
+                <input type="Submit" value="Register">
+            </tr><br>
+            <tr>
+                <input type="reset" value="Reset">
+            </tr>
+        </table>
+    </form>
+
+</body>
 
 
 </html>
