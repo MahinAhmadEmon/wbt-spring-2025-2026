@@ -5,12 +5,12 @@ follow semantics
 */
 
 .menu ul {
-    list-style: none;    
+    list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;         
-    gap: 20px;             
-    justify-content: center; 
+    display: flex;
+    gap: 20px;
+    justify-content: center;
     align-items: center;
 }
 
@@ -24,4 +24,3 @@ follow semantics
 .menu a:hover {
     text-decoration: underline;
 }
-

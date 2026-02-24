@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Lab Form</title>
+    <link rel="stylesheet" href="form.css">
+</head>
+
+<body class="body">
+
+    <h3>Donor Information</h3>
+
+    <form class="form" method="post">
+        <table class="table">
+            <tr>
+                <td><label for="First Name">First Name<span>*</span></label></td>
+                <td><input type="text" id="First name" required maxlength="10"></td>
+            </tr>
+            <tr>
+                <td><label for="Last Name">Last Name<span>*</span></label></td>
+                <td><input type="text" id="Last name" required maxlength="10"></td>
+            </tr>
+            <tr>
+                <td><label for="Company">Company</label></td>
+                <td><input type="text" id="Company" required></td>
+            </tr>
+            <tr>
+                <td><label for="Address1">Address 1<span>*</span></label></td>
+                <td><input type="text" id="Address 1" required></td>
+            </tr>
+            <tr>
+                <td><label for="Address2">Address 2</label></td>
+                <td><input type="text" id="Address 2" required></td>
+            </tr>
+            <tr>
+                <td><label for="City">City<span>*</span></label></td>
+                <td><input type="text" id="City" required maxlength="10"></td>
+            </tr>
+            <tr>
+                <td><label for="State">State<span>*</span></label></td>
+                <td>
+                    <select name="State" placeholder="Select a State">
+                        <option value="bd">Dhaka</option>
+                        <option value="bd">Chittagong</option>
+                        <option value="bd">Rajshahi</option>
+                        <option value="bd">Khulna</option>
+                        <option value="bd">Borishal</option>
+                        <option value="bd">Sylhet</option>
+                        <option value="bd">Rongpur</option>
+                    </select>
+                </td>
+            <tr>
+                <td><label for="ZipCOde">Zip code<span>*</span></label></td>
+                <td><input type="number" id="Zip Code" required maxlength="10"></td>
+            </tr>
+            <tr>
+                <td><label for="State">State<span>*</span></label></td>
+                <td>
+                    <select name="State" placeholder="Select a State">
+                        <option value="bd">Bangladesh</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="Phone">Phone</label></td>
+                <td><input type="number" id="Phone" maxlength="11"></td>
+            </tr>
+            <tr>
+                <td><label for="Phone">Fax</label></td>
+                <td><input type="number" id="Fax"></td>
+            </tr>
+            <tr>
+                <td><label for="Email">Email<span>*</span></label></td>
+                <td><input type="text" id="Email" required></td>
+            </tr>
+            <tr>
+                <td><label for="Donation">Donation Amount<span>*</span></label></td>
+                <td>
+                    <input type="radio" name="option" value="None"> None
+                    <input type="radio" name="option" value="$50"> $50
+                    <input type="radio" name="option" value="$75"> $75
+                    <input type="radio" name="option" value="$100"> $100
+                    <input type="radio" name="option" value="$250"> $250
+                    <input type="radio" name="option" value="Other"> Other
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><label for="Other Amount">Other Amount <textarea id="OtherAmount" name="OtherAmount" rows="1"
+                            cols="20" maxlength="8"></textarea></label></td>
+            </tr>
+            <tr>
+                <td><label for="Recurring Doantion">Recurring Donation</label></td>
+                <td><input type="checkbox" value="html">I am interested in giving on a regular basis</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><label for="Monthly">Monthly Credit card $ <textarea id="Monthly" rows="1" cols="4"></textarea> for
+                        <textarea id="Monthly" rows="1" cols="4"></textarea> months</label> </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit">
+                    <input type="reset">
+                </td>
+            </tr>
+        </table>
+
+    </form>
+</body>
+
+</html>
