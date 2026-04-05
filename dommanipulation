@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM Manipulation Demo</title>
+
+    <style>
+        /*
+      BASIC PAGE STYLING
+      ------------------
+      These styles make the demo easier to read and interact with.
+      The JavaScript section below will also change some styles dynamically,
+      which demonstrates style manipulation through the DOM.
+    */
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 20px;
+            color: #222;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            margin-top: 0;
+        }
+
+        button {
+            margin: 8px 8px 8px 0;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        .highlight {
+            background-color: #fff3cd;
+            color: #7c2d12;
+            padding: 10px;
+            border-left: 5px solid #f59e0b;
+            border-radius: 6px;
+        }
+
+        .error {
+            color: #b91c1c;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .success {
+            color: #166534;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        .invalid {
+            border: 2px solid #dc2626;
+            background: #fef2f2;
+        }
+
+        .valid {
+            border: 2px solid #16a34a;
+            background: #f0fdf4;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>DOM Manipulation with JavaScript</h1>
+        <p class="subtitle">
+            This page demonstrates inserting elements, deleting elements, updating content,
+            style manipulation, and form validation.
+        </p>
+
+        <!--
+      SECTION 1: INSERTING NEW ELEMENTS
+      ---------------------------------
+      We will add new <li> items into the unordered list when the user clicks a button.
+    -->
+        <div class="section">
+            <h2>1) Insert Element</h2>
+            <p>Click the button to insert a new list item into the DOM.</p>
+            <button id="addItemBtn">Add New List Item</button>
+            <ul id="itemList">
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+            </ul>
+        </div>
+
+        <!--
+      SECTION 2: DELETING AN EXISTING ELEMENT
+      ---------------------------------------
+      We will remove the last list item from the list.
+    -->
+        <div class="section">
+            <h2>2) Delete Element</h2>
+            <p>Click the button to remove the last item from the same list.</p>
+            <button id="removeItemBtn">Remove Last List Item</button>
+        </div>
+
+        <!--
+      SECTION 3: UPDATING CONTENT OF AN EXISTING ELEMENT
+      --------------------------------------------------
+      We will change the text inside the paragraph below.
+    -->
+        <div class="section">
+            <h2>3) Update Existing Content</h2>
+            <p id="contentText">This text will be updated when you click the button.</p>
+            <button id="updateTextBtn">Update Paragraph Text</button>
+        </div>
+
+        <!--
+      SECTION 4: STYLE MANIPULATION
+      -----------------------------
+      JavaScript will dynamically add/remove a CSS class on the box below.
+      This is a common DOM manipulation technique for changing styles.
+    -->
+        <div class="section">
+            <h2>4) Style Manipulation</h2>
+            <div id="styleBox">
+                This box will change style when you click the button.
+            </div>
+            <button id="styleBtn">Toggle Highlight Style</button>
+        </div>
+
+        <!--
+      SECTION 5: FORM VALIDATION
+      --------------------------
+      We will validate three inputs:
+      - Name must not be empty
+      - Email must include @ and .
+      - Password must be at least 6 characters
+
+      If validation fails, JavaScript will show error messages and style the inputs.
+      If validation passes, a success message will be shown.
+    -->
+        <div class="section">
+            <h2>5) Form Validation</h2>
+            <form id="demoForm" novalidate>
+                <div class="input-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Enter your name" />
+                    <div class="error" id="nameError"></div>
+                </div>
+
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email" />
+                    <div class="error" id="emailError"></div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" />
+                    <div class="error" id="passwordError"></div>
+                </div>
+
+                <button type="submit">Submit Form</button>
+                <div id="formSuccess" class="success"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        /*
+          ==========================================================
+          JAVASCRIPT: DOM MANIPULATION EXAMPLES
+          ==========================================================
+          DOM stands for Document Object Model.
+          JavaScript uses the DOM to access, change, add, remove,
+          and validate elements on a web page.
+        */
+
+        /*
+          ----------------------------------------------------------
+          STEP 1: SELECT THE ELEMENTS WE WANT TO WORK WITH
+          ----------------------------------------------------------
+          We use document.getElementById() to get references to HTML elements.
+          Once we store them in variables, we can manipulate them with JavaScript.
+        */
+        const addItemBtn = document.getElementById('addItemBtn');
+        const removeItemBtn = document.getElementById('removeItemBtn');
+        const updateTextBtn = document.getElementById('updateTextBtn');
+        const styleBtn = document.getElementById('styleBtn');
+
+        const itemList = document.getElementById('itemList');
+        const contentText = document.getElementById('contentText');
+        const styleBox = document.getElementById('styleBox');
+
+        const demoForm = document.getElementById('demoForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        const formSuccess = document.getElementById('formSuccess');
+
+        /*
+          ----------------------------------------------------------
+          STEP 2: INSERT A NEW ELEMENT INTO THE DOM
+          ----------------------------------------------------------
+          We listen for a button click.
+          When the user clicks:
+          1. Create a new <li> element using document.createElement().
+          2. Add text to it using textContent.
+          3. Add that new <li> to the <ul> using appendChild().
+        */
+        let itemCounter = 1;
+
+        addItemBtn.addEventListener('click', function () {
+            // Create a brand new <li> element.
+            const newItem = document.createElement('li');
+
+            // Set the text that will appear inside the new list item.
+            newItem.textContent = 'New Topic ' + itemCounter;
+
+            // Add the new item to the end of the list.
+            itemList.appendChild(newItem);
+
+            // Increase counter so each inserted item gets a different name.
+            itemCounter++;
+        });
+
+        /*
+          ----------------------------------------------------------
+          STEP 3: DELETE AN EXISTING ELEMENT
+          ----------------------------------------------------------
+          We remove the last <li> from the list.
+          To do that:
+          1. Check whether the list has any children.
+          2. Use lastElementChild to get the last <li>.
+          3. Remove it using removeChild().
+        */
+        removeItemBtn.addEventListener('click', function () {
+            // Check if there is at least one list item in the list.
+            if (itemList.children.length > 0) {
+                // Get the last item in the list.
+                const lastItem = itemList.lastElementChild;
+
+                // Remove the last item from the list.
+                itemList.removeChild(lastItem);
+            } else {
+                // This alert helps the user understand why nothing happened.
+                alert('There are no items left to remove.');
+            }
+        });
+
+        /*
+          ----------------------------------------------------------
+          STEP 4: UPDATE THE CONTENT OF AN EXISTING ELEMENT
+          ----------------------------------------------------------
+          We change the text inside an existing paragraph.
+          This is done using the textContent property.
+        */
+        updateTextBtn.addEventListener('click', function () {
+            contentText.textContent = 'The paragraph text has been updated using JavaScript DOM manipulation!';
+        });
+
+        /*
+          ----------------------------------------------------------
+          STEP 5: STYLE MANIPULATION
+          ----------------------------------------------------------
+          We use classList.toggle() to add or remove a CSS class.
+          When the class exists, the style changes.
+          When it is removed, the original style comes back.
+        */
+        styleBtn.addEventListener('click', function () {
+            styleBox.classList.toggle('highlight');
+        });
+
+        /*
+          ----------------------------------------------------------
+          STEP 6: FORM VALIDATION HELPER FUNCTIONS
+          ----------------------------------------------------------
+          These helper functions make the validation code cleaner.
+          - showError(): display an error message and mark input as invalid
+          - showValid(): remove error message and mark input as valid
+          - resetValidation(): clear previous validation states/messages
+        */
+
+        function showError(inputElement, errorElement, message) {
+            // Show the error message text.
+            errorElement.textContent = message;
+
+            // Remove any old "valid" class and add "invalid" class.
+            inputElement.classList.remove('valid');
+            inputElement.classList.add('invalid');
+        }
+
+        function showValid(inputElement, errorElement) {
+            // Remove any old error message.
+            errorElement.textContent = '';
+
+            // Remove invalid styling and add valid styling.
+            inputElement.classList.remove('invalid');
+            inputElement.classList.add('valid');
+        }
+
+        function resetValidation() {
+            // Clear success message from any previous submission.
+            formSuccess.textContent = '';
+
+            // Clear all error texts.
+            nameError.textContent = '';
+            emailError.textContent = '';
+            passwordError.textContent = '';
+
+            // Remove both valid/invalid classes from every input.
+            nameInput.classList.remove('valid', 'invalid');
+            emailInput.classList.remove('valid', 'invalid');
+            passwordInput.classList.remove('valid', 'invalid');
+        }
+
+        /*
+          ----------------------------------------------------------
+          STEP 7: FORM VALIDATION ON SUBMIT
+          ----------------------------------------------------------
+          When the form is submitted:
+          1. Prevent default form submission with preventDefault().
+          2. Reset old validation messages.
+          3. Read current input values.
+          4. Check each input with rules.
+          5. Show errors if something is wrong.
+          6. If everything is correct, show a success message.
+        */
+        demoForm.addEventListener('submit', function (event) {
+            // Stop the form from reloading the page.
+            event.preventDefault();
+
+            // Remove old validation messages/styles before checking again.
+            resetValidation();
+
+            // Get the trimmed values typed by the user.
+            const nameValue = nameInput.value.trim();
+            const emailValue = emailInput.value.trim();
+            const passwordValue = passwordInput.value.trim();
+
+            // This variable helps us track whether the form is valid overall.
+            let isFormValid = true;
+
+            /*
+              VALIDATE NAME
+              Rule: name cannot be empty.
+            */
+            if (nameValue === '') {
+                showError(nameInput, nameError, 'Name is required.');
+                isFormValid = false;
+            } else {
+                showValid(nameInput, nameError);
+            }
+
+            /*
+              VALIDATE EMAIL
+              Rule: must include both "@" and "."
+              Note: this is a simple demo check, not a perfect real-world email validator.
+            */
+            if (emailValue === '') {
+                showError(emailInput, emailError, 'Email is required.');
+                isFormValid = false;
+            } else if (!emailValue.includes('@') || !emailValue.includes('.')) {
+                showError(emailInput, emailError, 'Please enter a valid email address.');
+                isFormValid = false;
+            } else {
+                showValid(emailInput, emailError);
+            }
+
+            /*
+              VALIDATE PASSWORD
+              Rule: password must be at least 6 characters long.
+            */
+            if (passwordValue === '') {
+                showError(passwordInput, passwordError, 'Password is required.');
+                isFormValid = false;
+            } else if (passwordValue.length < 6) {
+                showError(passwordInput, passwordError, 'Password must be at least 6 characters long.');
+                isFormValid = false;
+            } else {
+                showValid(passwordInput, passwordError);
+            }
+
+            /*
+              FINAL RESULT
+              If every validation rule passed, show a success message.
+            */
+            if (isFormValid) {
+                formSuccess.textContent = 'Form submitted successfully! All fields are valid.';
+            }
+        });
+    </script>
+</body>
+
+</html>
