@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task 5</title>
+</head>
+<body>
+
+<button id="changeBtn">Change Background</button>
+
+
+<script>
+const button = document.getElementById("changeBtn");
+
+button.addEventListener("click", function () {
+
+    const colors = ["lightblue", "lightyellow", "lavender"];
+
+    const randomIndex = Math.floor(Math.random() * colors.length);
+
+    document.body.style.backgroundColor = colors[randomIndex];
+
+});
+</script>
+
+</body>
+</html>

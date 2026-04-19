@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Student Registration Form</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            margin: 0;
+            padding: 20px;
+            color: #222;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+        }
+
+        .section h2 {
+            margin-top: 0;
+        }
+
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            margin: 8px 8px 8px 0;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .error {
+            color: #b91c1c;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .success {
+            color: #166534;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .invalid {
+            border: 2px solid #dc2626;
+            background: #fef2f2;
+        }
+
+        .valid {
+            border: 2px solid #16a34a;
+            background: #f0fdf4;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #dbeafe;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .remove-btn {
+            background: #dc2626;
+        }
+
+        .remove-btn:hover {
+            background: #b91c1c;
+        }
+
+        .update-btn {
+            background: #16a34a;
+        }
+
+        .update-btn:hover {
+            background: #15803d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Student Registration Form</h1>
+        <div class="section">
+            <h2>Register Student</h2>
+            <form id="studentForm" novalidate>
+                <div class="input-group">
+                    <label for="studentName">Student Name</label>
+                    <input type="text" id="studentName" placeholder="Enter student name">
+                    <div class="error" id="nameError"></div>
+                </div>
+
+                <div class="input-group">
+                    <label for="studentAge">Age</label>
+                    <input type="text" id="studentAge" placeholder="Enter age">
+                    <div class="error" id="ageError"></div>
+                </div>
+
+                <div class="input-group">
+                    <label for="studentCourse">Course</label>
+                    <select id="studentCourse">
+                        <option value="">Select course</option>
+                        <option value="Web Tech">CSE</option>
+                        <option value="Ai">BBA</option>
+                        <option value="C#">English</option>
+                        <option value="Java">Math</option>
+                        <option value="C++">Math</option>
+                    </select>
+                    <div class="error" id="courseError"></div>
+                </div>
+                <button type="submit" id="submitBtn">Add Student</button>
+                <div class="success" id="formSuccess"></div>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Student List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Course</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const studentForm = document.getElementById('studentForm');
+        const studentName = document.getElementById('studentName');
+        const studentAge = document.getElementById('studentAge');
+        const studentCourse = document.getElementById('studentCourse');
+        const studentTableBody = document.getElementById('studentTableBody');
+        const submitBtn = document.getElementById('submitBtn');
+        const formSuccess = document.getElementById('formSuccess');
+        const nameError = document.getElementById('nameError');
+        const ageError = document.getElementById('ageError');
+        const courseError = document.getElementById('courseError');
+
+        let editRow = null;
+
+        function showError(inputElement, errorElement, message) {
+            errorElement.textContent = message;
+            inputElement.classList.remove('valid');
+            inputElement.classList.add('invalid');
+        }
+
+        function showValid(inputElement, errorElement) {
+            errorElement.textContent = '';
+            inputElement.classList.remove('invalid');
+            inputElement.classList.add('valid');
+        }
+
+        function resetValidation() {
+            formSuccess.textContent = '';
+
+            nameError.textContent = '';
+            ageError.textContent = '';
+            courseError.textContent = '';
+
+            studentName.classList.remove('valid', 'invalid');
+            studentAge.classList.remove('valid', 'invalid');
+            studentCourse.classList.remove('valid', 'invalid');
+        }
+
+        function clearForm() {
+            studentName.value = '';
+            studentAge.value = '';
+            studentCourse.value = '';
+            editRow = null;
+            submitBtn.textContent = 'Add Student';
+
+            studentName.classList.remove('valid');
+            studentAge.classList.remove('valid');
+            studentCourse.classList.remove('valid');
+        }
+
+        studentForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            resetValidation();
+
+            const nameValue = studentName.value.trim();
+            const ageValue = studentAge.value.trim();
+            const courseValue = studentCourse.value;
+
+            let isFormValid = true;
+
+            if (nameValue === '') {
+                showError(studentName, nameError, 'Name is required.');
+                isFormValid = false;
+            } else {
+                showValid(studentName, nameError);
+            }
+
+            if (ageValue === '') {
+                showError(studentAge, ageError, 'Age is required.');
+                isFormValid = false;
+            } else if (isNaN(ageValue)) {
+                showError(studentAge, ageError, 'Age must be a number.');
+                isFormValid = false;
+            } else {
+                showValid(studentAge, ageError);
+            }
+
+            if (courseValue === '') {
+                showError(studentCourse, courseError, 'Please select a course.');
+                isFormValid = false;
+            } else {
+                showValid(studentCourse, courseError);
+            }
+
+            if (!isFormValid) {
+                return;
+            }
+
+            if (editRow === null) {
+                const newRow = document.createElement('tr');
+
+                newRow.innerHTML = `
+                    <td>${nameValue}</td>
+                    <td>${ageValue}</td>
+                    <td>${courseValue}</td>
+                    <td>
+                        <button type="button" class="btn-small update-btn">Update</button>
+                        <button type="button" class="btn-small remove-btn">Remove</button>
+                    </td>
+                `;
+
+                studentTableBody.appendChild(newRow);
+                formSuccess.textContent = 'Student added successfully!';
+            } else {
+                editRow.cells[0].textContent = nameValue;
+                editRow.cells[1].textContent = ageValue;
+                editRow.cells[2].textContent = courseValue;
+                formSuccess.textContent = 'Student updated successfully!';
+            }
+
+            clearForm();
+        });
+
+        studentTableBody.addEventListener('click', function (event) {
+            if (event.target.classList.contains('remove-btn')) {
+                const row = event.target.parentElement.parentElement;
+                row.remove();
+                formSuccess.textContent = 'Student removed successfully!';
+            }
+
+            if (event.target.classList.contains('update-btn')) {
+                const row = event.target.parentElement.parentElement;
+
+                studentName.value = row.cells[0].textContent;
+                studentAge.value = row.cells[1].textContent;
+                studentCourse.value = row.cells[2].textContent;
+
+                editRow = row;
+                submitBtn.textContent = 'Save Update';
+                formSuccess.textContent = '';
+            }
+        });
+    </script>
+</body>
+
+</html>
