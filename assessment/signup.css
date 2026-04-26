@@ -1,0 +1,12 @@
+body {
+    background-color: cyan;
+}
+
+.fieldset {
+    width: 300px;
+    background-color: azure;
+    border: 2px solid rgb(255, 121, 121);
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 20px;
+}
