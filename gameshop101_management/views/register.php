@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Register &mdash; Library Management</title>
+<title>Register &mdash; GameShop101 Management</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="auth-body">
 
 <div class="auth-shell">
     <div class="auth-side">
-        <div class="logo-big">&#128218;</div>
-        <h1>Join as a Librarian</h1>
-        <p>Create your account to start managing books in the library system.</p>
+        <div class="logo-big">&#127918;</div>
+        <h1>Join as Staff</h1>
+        <p>Create your account to start managing games in the gameshop101 system.</p>
         <ul class="feature-list">
-            <li>&#10003; Add and edit books</li>
+            <li>&#10003; Add and edit games</li>
             <li>&#10003; Track inventory and pricing</li>
             <li>&#10003; Search instantly with AJAX</li>
         </ul>
@@ -23,7 +23,7 @@
     <div class="auth-form-wrap">
         <div class="auth-card">
             <h2>Create Account</h2>
-            <p class="muted">Register as a librarian</p>
+            <p class="muted">Register as staff</p>
 
             <?php if (!empty($error)): ?>
                 <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>

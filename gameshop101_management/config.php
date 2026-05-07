@@ -2,7 +2,7 @@
 // ================================================================
 // Database Connection (procedural mysqli)
 // ================================================================
-$conn = mysqli_connect('localhost', 'root', '', 'library_db');
+$conn = mysqli_connect('localhost', 'root', '', 'gameshop101_db');
 if (!$conn) {
     die('Database connection failed: ' . mysqli_connect_error());
 }

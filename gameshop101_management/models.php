@@ -13,14 +13,14 @@ function authAdmin($conn, $username, $password) {
     return ($row && password_verify($password, $row['password'])) ? $row : false;
 }
 
-/* ----------------- Librarian ----------------- */
-function getLibrarians($conn) {
-    $r = mysqli_query($conn, "SELECT id, name, contact, username FROM librarians ORDER BY id DESC");
+/* ----------------- Staff ----------------- */
+function getStaff($conn) {
+    $r = mysqli_query($conn, "SELECT id, name, contact, username FROM staff ORDER BY id DESC");
     return mysqli_fetch_all($r, MYSQLI_ASSOC);
 }
 
-function getLibrarian($conn, $id) {
-    $stmt = mysqli_prepare($conn, "SELECT id, name, contact, username FROM librarians WHERE id = ?");
+function getStaffMember($conn, $id) {
+    $stmt = mysqli_prepare($conn, "SELECT id, name, contact, username FROM staff WHERE id = ?");
     mysqli_stmt_bind_param($stmt, 'i', $id);
     mysqli_stmt_execute($stmt);
     $row = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
@@ -28,37 +28,37 @@ function getLibrarian($conn, $id) {
     return $row;
 }
 
-function addLibrarian($conn, $name, $contact, $username, $password) {
+function addStaff($conn, $name, $contact, $username, $password) {
     $hash = password_hash($password, PASSWORD_DEFAULT);
     $stmt = mysqli_prepare($conn,
-        "INSERT INTO librarians (name, contact, username, password) VALUES (?, ?, ?, ?)");
+        "INSERT INTO staff (name, contact, username, password) VALUES (?, ?, ?, ?)");
     mysqli_stmt_bind_param($stmt, 'ssss', $name, $contact, $username, $hash);
     $ok = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     return $ok;
 }
 
-function updateLibrarian($conn, $id, $name, $contact, $username) {
+function updateStaff($conn, $id, $name, $contact, $username) {
     $stmt = mysqli_prepare($conn,
-        "UPDATE librarians SET name = ?, contact = ?, username = ? WHERE id = ?");
+        "UPDATE staff SET name = ?, contact = ?, username = ? WHERE id = ?");
     mysqli_stmt_bind_param($stmt, 'sssi', $name, $contact, $username, $id);
     $ok = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     return $ok;
 }
 
-function deleteLibrarian($conn, $id) {
-    $stmt = mysqli_prepare($conn, "DELETE FROM librarians WHERE id = ?");
+function deleteStaff($conn, $id) {
+    $stmt = mysqli_prepare($conn, "DELETE FROM staff WHERE id = ?");
     mysqli_stmt_bind_param($stmt, 'i', $id);
     $ok = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     return $ok;
 }
 
-function searchLibrarians($conn, $term) {
+function searchStaff($conn, $term) {
     $like = '%' . $term . '%';
     $stmt = mysqli_prepare($conn,
-        "SELECT id, name, contact, username FROM librarians
+        "SELECT id, name, contact, username FROM staff
          WHERE name LIKE ? OR username LIKE ? OR contact LIKE ?
          ORDER BY id DESC");
     mysqli_stmt_bind_param($stmt, 'sss', $like, $like, $like);
@@ -68,9 +68,9 @@ function searchLibrarians($conn, $term) {
     return $rows;
 }
 
-function authLibrarian($conn, $username, $password) {
+function authStaff($conn, $username, $password) {
     $stmt = mysqli_prepare($conn,
-        "SELECT id, name, username, password FROM librarians WHERE username = ?");
+        "SELECT id, name, username, password FROM staff WHERE username = ?");
     mysqli_stmt_bind_param($stmt, 's', $username);
     mysqli_stmt_execute($stmt);
     $row = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
@@ -78,12 +78,12 @@ function authLibrarian($conn, $username, $password) {
     return ($row && password_verify($password, $row['password'])) ? $row : false;
 }
 
-function librarianUsernameExists($conn, $username, $excludeId = null) {
+function staffUsernameExists($conn, $username, $excludeId = null) {
     if ($excludeId) {
-        $stmt = mysqli_prepare($conn, "SELECT id FROM librarians WHERE username = ? AND id != ?");
+        $stmt = mysqli_prepare($conn, "SELECT id FROM staff WHERE username = ? AND id != ?");
         mysqli_stmt_bind_param($stmt, 'si', $username, $excludeId);
     } else {
-        $stmt = mysqli_prepare($conn, "SELECT id FROM librarians WHERE username = ?");
+        $stmt = mysqli_prepare($conn, "SELECT id FROM staff WHERE username = ?");
         mysqli_stmt_bind_param($stmt, 's', $username);
     }
     mysqli_stmt_execute($stmt);
@@ -93,14 +93,14 @@ function librarianUsernameExists($conn, $username, $excludeId = null) {
     return $exists;
 }
 
-/* ------------------- Book ------------------- */
-function getBooks($conn) {
-    $r = mysqli_query($conn, "SELECT id, title, author, quantity, price FROM books ORDER BY id DESC");
+/* ------------------- Game ------------------- */
+function getGames($conn) {
+    $r = mysqli_query($conn, "SELECT id, title, platform, quantity, price FROM games ORDER BY id DESC");
     return mysqli_fetch_all($r, MYSQLI_ASSOC);
 }
 
-function getBook($conn, $id) {
-    $stmt = mysqli_prepare($conn, "SELECT id, title, author, quantity, price FROM books WHERE id = ?");
+function getGame($conn, $id) {
+    $stmt = mysqli_prepare($conn, "SELECT id, title, platform, quantity, price FROM games WHERE id = ?");
     mysqli_stmt_bind_param($stmt, 'i', $id);
     mysqli_stmt_execute($stmt);
     $row = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
@@ -108,37 +108,37 @@ function getBook($conn, $id) {
     return $row;
 }
 
-function addBook($conn, $title, $author, $quantity, $price, $librarianId) {
+function addGame($conn, $title, $platform, $quantity, $price, $staffId) {
     $stmt = mysqli_prepare($conn,
-        "INSERT INTO books (title, author, quantity, price, librarian_id) VALUES (?, ?, ?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, 'ssidi', $title, $author, $quantity, $price, $librarianId);
+        "INSERT INTO games (title, platform, quantity, price, staff_id) VALUES (?, ?, ?, ?, ?)");
+    mysqli_stmt_bind_param($stmt, 'ssidi', $title, $platform, $quantity, $price, $staffId);
     $ok = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     return $ok;
 }
 
-function updateBook($conn, $id, $title, $author, $quantity, $price) {
+function updateGame($conn, $id, $title, $platform, $quantity, $price) {
     $stmt = mysqli_prepare($conn,
-        "UPDATE books SET title = ?, author = ?, quantity = ?, price = ? WHERE id = ?");
-    mysqli_stmt_bind_param($stmt, 'ssidi', $title, $author, $quantity, $price, $id);
+        "UPDATE games SET title = ?, platform = ?, quantity = ?, price = ? WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, 'ssidi', $title, $platform, $quantity, $price, $id);
     $ok = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     return $ok;
 }
 
-function deleteBook($conn, $id) {
-    $stmt = mysqli_prepare($conn, "DELETE FROM books WHERE id = ?");
+function deleteGame($conn, $id) {
+    $stmt = mysqli_prepare($conn, "DELETE FROM games WHERE id = ?");
     mysqli_stmt_bind_param($stmt, 'i', $id);
     $ok = mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     return $ok;
 }
 
-function searchBooks($conn, $term) {
+function searchGames($conn, $term) {
     $like = '%' . $term . '%';
     $stmt = mysqli_prepare($conn,
-        "SELECT id, title, author, quantity, price FROM books
-         WHERE title LIKE ? OR author LIKE ?
+        "SELECT id, title, platform, quantity, price FROM games
+         WHERE title LIKE ? OR platform LIKE ?
          ORDER BY id DESC");
     mysqli_stmt_bind_param($stmt, 'ss', $like, $like);
     mysqli_stmt_execute($stmt);

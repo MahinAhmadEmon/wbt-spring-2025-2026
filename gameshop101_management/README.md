@@ -1,30 +1,30 @@
-# Library Management System (Compact MVC)
+# GameShop101 Management System (Compact MVC)
 
-A minimal PHP + MySQL Library Management System, built with procedural mysqli + prepared statements. All CRUD operations live on a single dashboard page per role (form on top, searchable table below).
+A minimal PHP + MySQL GameShop101 Management System, built with procedural mysqli + prepared statements. All CRUD operations live on a single dashboard page per role (form on top, searchable table below).
 
 ## Project Structure (MVC, flat)
 
 ```
-library_management/
+gameshop101_management/
 ├── config.php           # DB connection + auto-seed of default admin
 ├── models.php           # M  - all DB functions
-├── controllers.php      # C  - login, register, admin, librarian
+├── controllers.php      # C  - login, register, admin, staff
 ├── index.php            # Front controller (router + AJAX + logout)
 ├── style.css            # All styling
 ├── database.sql         # DB schema
 └── views/               # V
     ├── login.php
     ├── register.php
-    ├── admin.php        # Single dashboard: librarian CRUD + AJAX search
-    └── librarian.php    # Single dashboard: book CRUD + AJAX search
+    ├── admin.php        # Single dashboard: staff CRUD + AJAX search
+    └── staff.php          # Single dashboard: game CRUD + AJAX search
 ```
 
 ## Install (XAMPP)
 
-1. Copy folder into `C:\xampp\htdocs\` (so it becomes `htdocs/library_management/`)
+1. Copy folder into `C:\xampp\htdocs\` (so it becomes `htdocs/gameshop101_management/`)
 2. Start Apache + MySQL in XAMPP
 3. Open `http://localhost/phpmyadmin` → **Import** → choose `database.sql` → Go
-4. Open `http://localhost/library_management/`
+4. Open `http://localhost/gameshop101_management/`
 5. Login with the default admin: **admin / admin123** (auto-created on first request)
 
 ## Default Credentials
@@ -32,7 +32,7 @@ library_management/
 | Role      | Username | Password   |
 | --------- | -------- | ---------- |
 | Admin     | admin    | admin123   |
-| Librarian | register one yourself, or admin can add | |
+| Staff     | register one yourself, or admin can add | |
 
 ## How CRUD Works on a Single Page
 

@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login &mdash; Library Management</title>
+<title>Login &mdash; GameShop101 Management</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="auth-body">
 
 <div class="auth-shell">
     <div class="auth-side">
-        <div class="logo-big">&#128218;</div>
-        <h1>Library Management System</h1>
-        <p>Manage librarians and books in one place. Sign in to access your dashboard.</p>
+        <div class="logo-big">&#127918;</div>
+        <h1>GameShop101 Management System</h1>
+        <p>Manage staff and games in one place. Sign in to access your dashboard.</p>
         <ul class="feature-list">
-            <li>&#10003; Admin manages librarians</li>
-            <li>&#10003; Librarians manage books</li>
+            <li>&#10003; Admin manages staff</li>
+            <li>&#10003; Staff manage games</li>
             <li>&#10003; Live AJAX search</li>
             <li>&#10003; Secure session login</li>
         </ul>
@@ -50,7 +50,7 @@
             </form>
 
             <p class="auth-foot">Don't have an account?
-                <a href="index.php?page=register">Register as Librarian</a>
+                <a href="index.php?page=register">Register as Staff</a>
             </p>
             <p class="hint"><strong>Default Admin:</strong> admin / admin123</p>
         </div>

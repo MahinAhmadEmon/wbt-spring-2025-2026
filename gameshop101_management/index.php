@@ -22,8 +22,8 @@ if ($page === 'logout') {
 
 /* ------------- AJAX search endpoint -------------
    Called by inline JS in dashboards.
-   ?page=ajax&type=librarian&q=...   (admin only)
-   ?page=ajax&type=book&q=...        (librarian only)
+   ?page=ajax&type=staff&q=...   (admin only)
+   ?page=ajax&type=game&q=...    (staff only)
 */
 if ($page === 'ajax') {
     header('Content-Type: application/json');
@@ -35,10 +35,10 @@ if ($page === 'ajax') {
     $type = $_GET['type'] ?? '';
     $q    = trim($_GET['q'] ?? '');
 
-    if ($type === 'librarian' && $_SESSION['user']['role'] === 'admin') {
-        echo json_encode($q === '' ? getLibrarians($conn) : searchLibrarians($conn, $q));
-    } elseif ($type === 'book' && $_SESSION['user']['role'] === 'librarian') {
-        echo json_encode($q === '' ? getBooks($conn) : searchBooks($conn, $q));
+    if ($type === 'staff' && $_SESSION['user']['role'] === 'admin') {
+        echo json_encode($q === '' ? getStaff($conn) : searchStaff($conn, $q));
+    } elseif ($type === 'game' && $_SESSION['user']['role'] === 'staff') {
+        echo json_encode($q === '' ? getGames($conn) : searchGames($conn, $q));
     } else {
         http_response_code(403);
         echo json_encode(['error' => 'Forbidden']);
@@ -63,14 +63,14 @@ if (!in_array($page, $publicPages) && !isset($_SESSION['user'])) {
 
 // Role gate
 if ($page === 'admin'     && $_SESSION['user']['role'] !== 'admin')      { header('Location: index.php?page=login'); exit; }
-if ($page === 'librarian' && $_SESSION['user']['role'] !== 'librarian')  { header('Location: index.php?page=login'); exit; }
+if ($page === 'staff'     && $_SESSION['user']['role'] !== 'staff')      { header('Location: index.php?page=login'); exit; }
 
 /* ------------- Dispatch ------------- */
 switch ($page) {
     case 'login':     loginCtrl($conn);     break;
     case 'register':  registerCtrl($conn);  break;
     case 'admin':     adminCtrl($conn);     break;
-    case 'librarian': librarianCtrl($conn); break;
+    case 'staff':     staffCtrl($conn);     break;
     default:
         header('Location: index.php?page=login');
         exit;

@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard &mdash; Library Management</title>
+<title>Staff Dashboard &mdash; GameShop101 Management</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body class="app-body">
@@ -12,16 +12,16 @@
 <!-- Navbar -->
 <header class="navbar">
     <div class="navbar-inner">
-        <a class="brand" href="index.php?page=admin">
-            <span class="brand-icon">&#128218;</span>
-            <span>LibSys</span>
+        <a class="brand" href="index.php?page=staff">
+            <span class="brand-icon">&#127918;</span>
+            <span>GameShop101</span>
         </a>
         <div class="nav-user">
             <span class="user-pill">
                 <span class="user-avatar"><?= strtoupper(substr($user['name'], 0, 1)) ?></span>
                 <span class="user-meta">
                     <span class="user-name"><?= htmlspecialchars($user['name']) ?></span>
-                    <span class="user-role">Admin</span>
+                    <span class="user-role">Staff</span>
                 </span>
             </span>
             <a href="index.php?page=logout" class="btn-logout">Logout</a>
@@ -32,15 +32,15 @@
 <main class="main-content">
     <div class="page-header">
         <div>
-            <h1 class="page-title">Manage Librarians</h1>
-            <p class="page-sub">Register, edit, search and remove librarian accounts</p>
+            <h1 class="page-title">Manage Games</h1>
+            <p class="page-sub">Add, edit, search and remove games in the catalog</p>
         </div>
     </div>
 
     <?php if (isset($_GET['msg'])): ?>
-        <?php $messages = ['added' => 'Librarian added successfully.',
-                           'updated' => 'Librarian updated successfully.',
-                           'deleted' => 'Librarian deleted successfully.'];
+        <?php $messages = ['added' => 'Game added successfully.',
+                           'updated' => 'Game updated successfully.',
+                           'deleted' => 'Game deleted successfully.'];
               $msg = $messages[$_GET['msg']] ?? null; ?>
         <?php if ($msg): ?><div class="alert alert-success"><?= $msg ?></div><?php endif; ?>
     <?php endif; ?>
@@ -52,60 +52,59 @@
     <!-- ============ Add / Edit Form ============ -->
     <div class="card form-card">
         <h3 class="card-title">
-            <?= $isEdit ? '&#9998; Edit Librarian (#' . intval($editing['id']) . ')' : '+ Add New Librarian' ?>
+            <?= $isEdit ? '&#9998; Edit Game (#' . intval($editing['id']) . ')' : '+ Add New Game' ?>
         </h3>
         <form method="POST"
-              action="index.php?page=admin&action=<?= $isEdit ? 'update&id=' . intval($editing['id']) : 'add' ?>"
+              action="index.php?page=staff&action=<?= $isEdit ? 'update&id=' . intval($editing['id']) : 'add' ?>"
               class="form" novalidate>
             <div class="field-row">
                 <div class="field">
-                    <label for="name">Librarian Name</label>
-                    <input type="text" id="name" name="name"
-                           value="<?= htmlspecialchars($editing['name'] ?? '') ?>"
-                           placeholder="Full name" required>
+                    <label for="title">Game Title</label>
+                    <input type="text" id="title" name="title"
+                           value="<?= htmlspecialchars($editing['title'] ?? '') ?>"
+                           placeholder="e.g. FIFA 25" required>
                 </div>
                 <div class="field">
-                    <label for="contact">Contact</label>
-                    <input type="text" id="contact" name="contact"
-                           value="<?= htmlspecialchars($editing['contact'] ?? '') ?>"
-                           placeholder="Phone number" required>
+                    <label for="platform">Platform</label>
+                    <input type="text" id="platform" name="platform"
+                           value="<?= htmlspecialchars($editing['platform'] ?? '') ?>"
+                           placeholder="e.g. PS5, PC, Xbox" required>
                 </div>
             </div>
             <div class="field-row">
                 <div class="field">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username"
-                           value="<?= htmlspecialchars($editing['username'] ?? '') ?>"
-                           placeholder="Login username" required>
+                    <label for="quantity">Quantity</label>
+                    <input type="number" id="quantity" name="quantity" min="0"
+                           value="<?= htmlspecialchars($editing['quantity'] ?? '') ?>"
+                           placeholder="0" required>
                 </div>
-                <?php if (!$isEdit): ?>
                 <div class="field">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password"
-                           placeholder="Min 6 characters" required>
+                    <label for="price">Price ($)</label>
+                    <input type="number" id="price" name="price" step="0.01" min="0"
+                           value="<?= htmlspecialchars($editing['price'] ?? '') ?>"
+                           placeholder="0.00" required>
                 </div>
-                <?php endif; ?>
             </div>
             <div class="form-actions">
                 <?php if ($isEdit): ?>
-                    <a href="index.php?page=admin" class="btn btn-ghost">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Update Librarian</button>
+                    <a href="index.php?page=staff" class="btn btn-ghost">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Update Game</button>
                 <?php else: ?>
-                    <button type="submit" class="btn btn-primary">Save Librarian</button>
+                    <button type="submit" class="btn btn-primary">Save Game</button>
                 <?php endif; ?>
             </div>
         </form>
     </div>
 
-    <!-- ============ Librarians Table ============ -->
+    <!-- ============ Games Table ============ -->
     <div class="card">
         <div class="card-toolbar">
             <div class="search-wrap">
                 <span class="search-icon">&#128269;</span>
                 <input type="text" id="searchInput" class="search-input"
-                       placeholder="Search by name, username or contact...">
+                       placeholder="Search by title or platform...">
             </div>
-            <span class="badge" id="resultCount"><?= count($librarians) ?> total</span>
+            <span class="badge" id="resultCount"><?= count($games) ?> total</span>
         </div>
 
         <div class="table-wrap">
@@ -113,28 +112,30 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Contact</th>
-                        <th>Username</th>
+                        <th>Title</th>
+                        <th>Platform</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
                         <th class="text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-                    <?php if (empty($librarians)): ?>
-                        <tr><td colspan="5" class="empty">No librarians yet.</td></tr>
+                    <?php if (empty($games)): ?>
+                        <tr><td colspan="6" class="empty">No games yet.</td></tr>
                     <?php else: ?>
-                        <?php foreach ($librarians as $i => $lib): ?>
+                        <?php foreach ($games as $i => $game): ?>
                             <tr>
                                 <td><?= $i + 1 ?></td>
-                                <td><?= htmlspecialchars($lib['name']) ?></td>
-                                <td><?= htmlspecialchars($lib['contact']) ?></td>
-                                <td><?= htmlspecialchars($lib['username']) ?></td>
+                                <td><?= htmlspecialchars($game['title']) ?></td>
+                                <td><?= htmlspecialchars($game['platform']) ?></td>
+                                <td><?= htmlspecialchars($game['quantity']) ?></td>
+                                <td>$<?= number_format($game['price'], 2) ?></td>
                                 <td class="text-right">
                                     <a class="btn-sm btn-edit"
-                                       href="index.php?page=admin&action=edit&id=<?= $lib['id'] ?>">Edit</a>
+                                       href="index.php?page=staff&action=edit&id=<?= $game['id'] ?>">Edit</a>
                                     <a class="btn-sm btn-delete"
-                                       href="index.php?page=admin&action=delete&id=<?= $lib['id'] ?>"
-                                       onclick="return confirm('Delete this librarian?')">Delete</a>
+                                       href="index.php?page=staff&action=delete&id=<?= $game['id'] ?>"
+                                       onclick="return confirm('Delete this game?')">Delete</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -145,7 +146,7 @@
     </div>
 </main>
 
-<footer class="footer">&copy; <?= date('Y') ?> Library Management System</footer>
+<footer class="footer">&copy; <?= date('Y') ?> GameShop101 Management System</footer>
 
 <!-- =========== Inline AJAX search =========== -->
 <script>
@@ -163,22 +164,23 @@
 
     function render(rows) {
         if (!rows.length) {
-            body.innerHTML = '<tr><td colspan="5" class="empty">No matching results.</td></tr>';
+            body.innerHTML = '<tr><td colspan="6" class="empty">No matching results.</td></tr>';
             counter.textContent = '0 results';
             return;
         }
         var html = '';
-        rows.forEach(function (r, i) {
+        rows.forEach(function (b, i) {
             html +=
                 '<tr>' +
                     '<td>' + (i + 1) + '</td>' +
-                    '<td>' + esc(r.name) + '</td>' +
-                    '<td>' + esc(r.contact) + '</td>' +
-                    '<td>' + esc(r.username) + '</td>' +
+                    '<td>' + esc(b.title) + '</td>' +
+                    '<td>' + esc(b.platform) + '</td>' +
+                    '<td>' + esc(b.quantity) + '</td>' +
+                    '<td>$' + parseFloat(b.price).toFixed(2) + '</td>' +
                     '<td class="text-right">' +
-                        '<a class="btn-sm btn-edit" href="index.php?page=admin&action=edit&id=' + r.id + '">Edit</a>' +
-                        '<a class="btn-sm btn-delete" href="index.php?page=admin&action=delete&id=' + r.id +
-                        '" onclick="return confirm(\'Delete this librarian?\')">Delete</a>' +
+                        '<a class="btn-sm btn-edit" href="index.php?page=staff&action=edit&id=' + b.id + '">Edit</a>' +
+                        '<a class="btn-sm btn-delete" href="index.php?page=staff&action=delete&id=' + b.id +
+                        '" onclick="return confirm(\'Delete this game?\')">Delete</a>' +
                     '</td>' +
                 '</tr>';
         });
@@ -189,7 +191,7 @@
     input.addEventListener('input', function () {
         clearTimeout(timer);
         timer = setTimeout(function () {
-            fetch('index.php?page=ajax&type=librarian&q=' + encodeURIComponent(input.value.trim()),
+            fetch('index.php?page=ajax&type=game&q=' + encodeURIComponent(input.value.trim()),
                   { credentials: 'same-origin' })
                 .then(function (r) { return r.json(); })
                 .then(render)
